@@ -9,6 +9,9 @@ TagManager:
   - Trail
   - TrackingObject
   - Obstacle
+  - Energy
+  - border
+  - StartZone
   layers:
   - Default
   - TransparentFX

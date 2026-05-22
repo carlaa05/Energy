@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class BackgroundMovement : MonoBehaviour
 {
-    public float speedX = 0.01f;
-    public float speedY = 0.0f;
+    public float speedX = 0.001f;
+    public float speedY = 0.0003f;
 
     private Renderer rend;
 
@@ -14,9 +14,11 @@ public class BackgroundMovement : MonoBehaviour
 
     void Update()
     {
-        rend.material.mainTextureOffset = new Vector2(
-            Time.time * speedX,
-            Time.time * speedY
-        );
+        Vector2 offset = rend.material.mainTextureOffset;
+
+        offset.x += speedX * Time.deltaTime;
+        offset.y += speedY * Time.deltaTime;
+
+        rend.material.mainTextureOffset = offset;
     }
 }

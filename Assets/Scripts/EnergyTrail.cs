@@ -30,13 +30,22 @@ public class EnergyTrail : MonoBehaviour
     }
 
     void Update()
+{
+    float distance = Vector3.Distance(transform.position, lastPoint);
+
+    if (distance >= minDistance)
     {
-        if (Vector3.Distance(transform.position, lastPoint) >= minDistance)
+        int steps = Mathf.FloorToInt(distance / minDistance);
+
+        for (int i = 1; i <= steps; i++)
         {
-            AddPoint(lastPoint);
-            lastPoint = transform.position;
+            Vector3 point = Vector3.Lerp(lastPoint, transform.position, (float)i / steps);
+            AddPoint(point);
         }
+
+        lastPoint = transform.position;
     }
+}
 
     void AddPoint(Vector3 point)
     {
@@ -74,5 +83,10 @@ public class EnergyTrail : MonoBehaviour
         // Actualizar línea
         lineRenderer.positionCount = points.Count;
         lineRenderer.SetPositions(points.ToArray());
+    }
+    
+    public void AddTrailPoints(int amount)
+    {
+        maxPoints += amount;
     }
 }
