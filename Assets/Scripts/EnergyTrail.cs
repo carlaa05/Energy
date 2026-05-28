@@ -17,6 +17,7 @@ public class EnergyTrail : MonoBehaviour
     private List<GameObject> trailColliders = new List<GameObject>();
 
     private Vector3 lastPoint;
+    private int initialMaxPoints;
 
     void Start()
     {
@@ -25,33 +26,34 @@ public class EnergyTrail : MonoBehaviour
             lineRenderer = GetComponent<LineRenderer>();
         }
 
+        initialMaxPoints = maxPoints;
+
         lineRenderer.positionCount = 0;
         lastPoint = transform.position;
     }
 
     void Update()
-{
-    float distance = Vector3.Distance(transform.position, lastPoint);
-
-    if (distance >= minDistance)
     {
-        int steps = Mathf.FloorToInt(distance / minDistance);
+        float distance = Vector3.Distance(transform.position, lastPoint);
 
-        for (int i = 1; i <= steps; i++)
+        if (distance >= minDistance)
         {
-            Vector3 point = Vector3.Lerp(lastPoint, transform.position, (float)i / steps);
-            AddPoint(point);
-        }
+            int steps = Mathf.FloorToInt(distance / minDistance);
 
-        lastPoint = transform.position;
+            for (int i = 1; i <= steps; i++)
+            {
+                Vector3 point = Vector3.Lerp(lastPoint, transform.position, (float)i / steps);
+                AddPoint(point);
+            }
+
+            lastPoint = transform.position;
+        }
     }
-}
 
     void AddPoint(Vector3 point)
     {
         points.Add(point);
 
-        // Crear collider
         if (trailColliderPrefab != null)
         {
             GameObject col = Instantiate(trailColliderPrefab, point, Quaternion.identity);
@@ -68,7 +70,6 @@ public class EnergyTrail : MonoBehaviour
             trailColliders.Add(col);
         }
 
-        // Limitar tamaño del trail
         if (points.Count > maxPoints)
         {
             points.RemoveAt(0);
@@ -80,13 +81,31 @@ public class EnergyTrail : MonoBehaviour
             }
         }
 
-        // Actualizar línea
         lineRenderer.positionCount = points.Count;
         lineRenderer.SetPositions(points.ToArray());
     }
-    
+
     public void AddTrailPoints(int amount)
     {
         maxPoints += amount;
+    }
+
+    public void ResetTrail()
+    {
+        points.Clear();
+
+        foreach (GameObject col in trailColliders)
+        {
+            if (col != null)
+            {
+                Destroy(col);
+            }
+        }
+
+        trailColliders.Clear();
+
+        lineRenderer.positionCount = 0;
+        maxPoints = initialMaxPoints;
+        lastPoint = transform.position;
     }
 }

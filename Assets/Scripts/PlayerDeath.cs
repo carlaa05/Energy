@@ -8,6 +8,8 @@ public class PlayerDeath : MonoBehaviour
 
     public AudioSource audioSource;
 
+    public GameObject explosionPrefab;
+
     private void OnTriggerEnter(Collider other)
     {
         // Obstacles
@@ -16,6 +18,11 @@ public class PlayerDeath : MonoBehaviour
             if (deathSound != null)
             {
                 audioSource.PlayOneShot(deathSound, volume);
+            }
+
+            if (explosionPrefab != null)
+            {
+                Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             }
 
             gameObject.SetActive(false);
@@ -36,6 +43,11 @@ public class PlayerDeath : MonoBehaviour
             if (deathSound != null)
             {
                 audioSource.PlayOneShot(deathSound, volume);
+            }
+
+            if (explosionPrefab != null)
+            {
+                Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             }
 
             gameObject.SetActive(false);
