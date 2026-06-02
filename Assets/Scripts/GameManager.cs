@@ -60,6 +60,11 @@ public class GameManager : MonoBehaviour
     void StartGame()
     {
         gameStarted = true;
+        ResetPlayer(player1);
+        ResetPlayer(player2);
+
+        player1.GetComponent<EnergyTrail>().StartDrawing();
+        player2.GetComponent<EnergyTrail>().StartDrawing();
 
         titleText.gameObject.SetActive(false);
         instructionText.gameObject.SetActive(false);
@@ -155,5 +160,10 @@ public class GameManager : MonoBehaviour
         {
             scoreText.text = "P1 " + player1Wins + " - " + player2Wins + " P2";
         }
+    }
+
+    public bool IsGameActive()
+    {
+        return gameStarted && !roundEnding;
     }
 }

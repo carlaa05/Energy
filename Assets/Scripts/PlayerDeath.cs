@@ -10,8 +10,12 @@ public class PlayerDeath : MonoBehaviour
 
     public GameObject explosionPrefab;
 
+    public GameManager gameManager;
+
     private void OnTriggerEnter(Collider other)
     {
+        if (gameManager != null && !gameManager.IsGameActive())
+            return;
         // Obstacles
         if (other.CompareTag("Obstacle"))
         {

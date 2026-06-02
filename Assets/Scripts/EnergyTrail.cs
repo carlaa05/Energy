@@ -7,7 +7,7 @@ public class EnergyTrail : MonoBehaviour
     public LineRenderer lineRenderer;
 
     [Header("Trail Settings")]
-    public int maxPoints = 80;
+    public int maxPoints = 5;
     public float minDistance = 0.15f;
 
     [Header("Collider Settings")]
@@ -18,6 +18,8 @@ public class EnergyTrail : MonoBehaviour
 
     private Vector3 lastPoint;
     private int initialMaxPoints;
+
+    public bool canDraw = false;
 
     void Start()
     {
@@ -34,6 +36,9 @@ public class EnergyTrail : MonoBehaviour
 
     void Update()
     {
+        if (!canDraw)
+            return;
+
         float distance = Vector3.Distance(transform.position, lastPoint);
 
         if (distance >= minDistance)
@@ -92,6 +97,7 @@ public class EnergyTrail : MonoBehaviour
 
     public void ResetTrail()
     {
+        canDraw = false;
         points.Clear();
 
         foreach (GameObject col in trailColliders)
@@ -105,7 +111,13 @@ public class EnergyTrail : MonoBehaviour
         trailColliders.Clear();
 
         lineRenderer.positionCount = 0;
-        maxPoints = initialMaxPoints;
+        maxPoints = 5;
         lastPoint = transform.position;
+    }
+
+    public void StartDrawing()
+    {
+        lastPoint = transform.position;
+        canDraw = true;
     }
 }
